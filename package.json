@@ -2,7 +2,7 @@
   "name": "config-editor",
   "version": "1.0.0",
   "description": "A GUI editor for configuration files.",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron ."
   },
