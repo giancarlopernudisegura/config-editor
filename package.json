@@ -1,0 +1,25 @@
+{
+  "name": "config-editor",
+  "version": "1.0.0",
+  "description": "A GUI editor for configuration files.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giancarlopernudisegura/config-editor.git"
+  },
+  "keywords": [
+    "editor"
+  ],
+  "author": "Giancarlo Pernudi Segura",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/giancarlopernudisegura/config-editor/issues"
+  },
+  "homepage": "https://github.com/giancarlopernudisegura/config-editor#readme",
+  "devDependencies": {
+    "electron": "^8.2.0"
+  }
+}
