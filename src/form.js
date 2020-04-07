@@ -9,10 +9,19 @@ const renderBoolean = (val) => {
         opt.innerText = String(v)
         if (v == val)
             opt.selected = 'selected'
-        select.appendChild(opt)
+        select.append(opt)
     }
-    inputDOM.appendChild(select)
+    inputDOM.append(select)
     return inputDOM
+}
+
+const renderSwitchButton = _ => {
+    // <i class="fas fa-exchange-alt"></i>
+    let button = this.createDOM('button.button.info')
+    let icon = this.createDOM('span.icon')
+    icon.append(this.createDOM('i.fas.fa-exchange-alt'))
+    button.append(icon)
+    return button
 }
 
 exports.renderForm = (json) => {
@@ -20,6 +29,7 @@ exports.renderForm = (json) => {
     for (property in json) {
         let field = this.createDOM('div.field')
         let label = this.createDOM('label.label')
+        let switchButton = renderSwitchButton()
         label.innerHTML = property
         let value
         switch (typeof json[property]) {
@@ -38,9 +48,8 @@ exports.renderForm = (json) => {
                 value = this.renderForm(json[property])
                 break
         }
-        field.appendChild(label)
-        field.appendChild(value)
-        form.appendChild(field)
+        field.append(label, value, switchButton)
+        form.append(field)
     }
     return form
 }
@@ -48,7 +57,7 @@ exports.renderForm = (json) => {
 exports.createDOM = (str) => {
     let element = str.match(/^\w+/i)
         element = document.createElement(element)
-    let classes = str.match(/\.\w+/gi)
+    let classes = str.match(/\.(\w-*)+/gi)
     if (classes !== null) {
         for (let cls of classes) {
             element.className += `${cls.substring(1)} `

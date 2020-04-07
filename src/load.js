@@ -1,5 +1,5 @@
 const { readFile } = require('fs').promises
-const { renderForm } = require('./parse.js')
+const { renderForm } = require('./form.js')
 
 exports.loadFile = async(path) => {
     return await readFile(path, 'utf8')

@@ -1,3 +1,7 @@
+:root {
+    --cyan: hsl(204, 86%, 53%);
+}
+
 .section {
     padding: 1.5rem 3rem;
 }
@@ -5,4 +9,9 @@
 .form {
     padding: 1rem;
     box-shadow: 0 0 10px #0002;
+}
+
+.info {
+    background: var(--cyan);
+    color: white;
 }
