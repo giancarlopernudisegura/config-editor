@@ -26,17 +26,17 @@ exports.renderForm = (json) => {
             case 'string':
                 value = this.createDOM('input.input')
                 value.value = json[property]
-                break;
+                break
             case 'number':
                 value = this.createDOM('input.input')
                 value.value = json[property]
-                break;
+                break
             case 'boolean':
                 value = renderBoolean(json[property])
-                break;
+                break
             case 'object':
                 value = this.renderForm(json[property])
-                break;
+                break
         }
         field.appendChild(label)
         field.appendChild(value)
