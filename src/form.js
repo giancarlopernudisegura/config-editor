@@ -24,31 +24,49 @@ const renderSwitchButton = _ => {
     return button
 }
 
+const renderControl = (DOM, otherDOM) => {
+    let control = this.createDOM('p.control')
+    control.append(DOM)
+    if (otherDOM !== undefined)
+        control.append(otherDOM)
+    return control
+}
+
 exports.renderForm = (json) => {
     let form = this.createDOM('div.form')
     for (property in json) {
         let field = this.createDOM('div.field')
-        let label = this.createDOM('label.label')
+        let label = this.createDOM('input.input')
         let switchButton = renderSwitchButton()
-        label.innerHTML = property
+        label.value = property
         let value
+
+        const nonRecursive = _ => {
+            field.className += 'has-addons'
+            field.append(renderControl(label), renderControl(value),renderControl(switchButton))
+        }
+
         switch (typeof json[property]) {
             case 'string':
                 value = this.createDOM('input.input')
                 value.value = json[property]
+                nonRecursive()
                 break
             case 'number':
                 value = this.createDOM('input.input')
+                nonRecursive()
                 value.value = json[property]
                 break
             case 'boolean':
                 value = renderBoolean(json[property])
+                nonRecursive()
                 break
             case 'object':
                 value = this.renderForm(json[property])
+                field.className += 'recursive'
+                field.append(renderControl(label), renderControl(value, switchButton))
                 break
         }
-        field.append(label, value, switchButton)
         form.append(field)
     }
     return form

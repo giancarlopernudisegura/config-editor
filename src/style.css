@@ -1,5 +1,7 @@
 :root {
-    --cyan: hsl(204, 86%, 53%);
+    --cyan: hsl(204, 86%, 55%);
+    --cyan-bright: hsl(204, 86%, 60%);
+    --cyan-dark: hsl(204, 86%, 50%);
 }
 
 .section {
@@ -11,7 +13,27 @@
     box-shadow: 0 0 10px #0002;
 }
 
-.info {
+.field.recursive {
+    flex-direction: column;
+}
+
+.field.recursive > p.control {
+    display: flex;
+}
+
+.field.recursive > p.control .form {
+    width: -webkit-fill-available;
+}
+
+.info, .button:focus, .button:hover {
     background: var(--cyan);
     color: white;
+}
+
+.button:hover {
+    background: var(--cyan-bright);
+}
+
+.button:focus {
+    background: var(--cyan-dark);
 }
