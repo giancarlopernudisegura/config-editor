@@ -1,0 +1,1 @@
+const { loadFile } = require('./load.js')
