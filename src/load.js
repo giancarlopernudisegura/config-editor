@@ -23,7 +23,10 @@ exports.fileUpload = (DOM) => {
         updateLabel(label, file.name)
         // load file, convert it to json, and render the form
         this.toObject(this.loadFile(file.path), type)
-            .then(renderForm)
+            .then(data => {
+                let sect = document.querySelector('.section.main')
+                sect.appendChild(renderForm(data))
+            })
     } else {
         updateLabel(label, "No File Chosen")
     }
