@@ -4,6 +4,10 @@
     --cyan-dark: hsl(204, 86%, 50%);
 }
 
+html {
+    overflow: auto;
+}
+
 .navbar-brand span.icon {
     margin-inline-end: 1ex;
 }
