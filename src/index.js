@@ -1,1 +1,1 @@
-const { toObject, loadFile, fileUpload } = require('./load.js')
+const { toObject, openFile, fileUpload } = require('./load.js')

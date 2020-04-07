@@ -1,7 +1,7 @@
 const { readFile } = require('fs').promises
 const { render } = require('./form.js')
 
-exports.loadFile = async(path) => {
+exports.openFile = async(path) => {
     return await readFile(path, 'utf8')
 }
 
