@@ -8,32 +8,27 @@ exports.openFile = async(path) => {
 exports.toObject = async(d, type) => {
     let data = await d
     switch (type) {
-        case 'application/json':
+        case 'json':
             return JSON.parse(data)
         default:
             console.error('File type not supported')
     }
 }
 
-exports.fileUpload = (DOM) => {
-    let label = document.querySelector('.file-name')
-    if (DOM.files.length > 0) {
-        let file = DOM.files[0]
-        let type = file.type
-        updateLabel(label, file.name)
-        // load file, convert it to json, and render the form
-        this.toObject(this.loadFile(file.path), type)
-            .then(data => {
-                let sect = document.querySelector('.section.main')
-                sect.appendChild(render.form(data))
-            })
-    } else {
-        updateLabel(label, "No File Chosen")
-    }
+exports.fileUpload = (path) => {
+    let type = recognizeType(path)
+    updateTitle(document.querySelector('h1.title.is-1'), type)
+    // load file, convert it to json, and render the form
+    this.toObject(this.openFile(path), type)
+        .then(data => {
+            let sect = document.querySelector('.section.main')
+            sect.innerHTML = ''
+            sect.appendChild(render.form(data))
+        })
 }
 
-const updateLabel = (DOM, str) => {
-    DOM.innerHTML = str
+const updateTitle = (DOM, str) => {
+    DOM.innerText = `${str} - Config Editor`
 }
 
 const recognizeType = (path) => {

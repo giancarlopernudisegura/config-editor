@@ -1,7 +1,11 @@
-const { app, BrowserWindow, Menu } = require('electron')
-const { openFile } = require('./load.js')
+const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron')
 const projectDir = 'src/'
 const isMac = process.platform === 'darwin'
+
+let replyEvent
+ipcMain.on('file-open', (event, arg) => {
+  replyEvent = event
+})
 
 function createWindow () {
   // Create the browser window.
@@ -43,10 +47,25 @@ app.whenReady().then(_ => {
       label: 'File',
       submenu: [
         {
-          label: 'Open',
+          label: 'Open File...',
+          accelerator: 'CmdOrCtrl+O',
           click: _ => {
-            openFile()
+            dialog.showOpenDialog({
+              properties: ['openFile', 'showHiddenFiles']
+            }).then(({canceled, filePaths, bookmarks}) => {
+              let path = filePaths[0]
+              if (!canceled)
+                replyEvent.reply('file-open', path)
+            })
           }
+        },
+        {
+          label: 'Save',
+          accelerator: 'CmdOrCtrl+S'
+        },
+        {
+          label: 'Save As...',
+          accelerator: 'CmdOrCtrl+Shift+S'
         },
         isMac ? { role: 'close' } : { role: 'quit' }
       ]
