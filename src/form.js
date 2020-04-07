@@ -1,13 +1,14 @@
-const renderBoolean = (val) => {
+exports.render = {}
+
+this.render.dropdown = (values, def) => {
     inputDOM = this.createDOM('div.select')
     let select = this.createDOM('select')
-    let opts = [true, false]
-    for (let v of opts) {
+    for (let v of values) {
         let opt
         opt = this.createDOM('option')
         opt.value = v
         opt.innerText = String(v)
-        if (v == val)
+        if (v == def)
             opt.selected = 'selected'
         select.append(opt)
     }
@@ -15,7 +16,7 @@ const renderBoolean = (val) => {
     return inputDOM
 }
 
-const renderSwitchButton = _ => {
+this.render.switchButton = _ => {
     // <i class="fas fa-exchange-alt"></i>
     let button = this.createDOM('button.button.info')
     let icon = this.createDOM('span.icon')
@@ -24,7 +25,7 @@ const renderSwitchButton = _ => {
     return button
 }
 
-const renderControl = (DOM, otherDOM) => {
+this.render.control = (DOM, otherDOM) => {
     let control = this.createDOM('p.control')
     control.append(DOM)
     if (otherDOM !== undefined)
@@ -32,39 +33,42 @@ const renderControl = (DOM, otherDOM) => {
     return control
 }
 
-exports.renderForm = (json) => {
+this.render.form = (json) => {
     let form = this.createDOM('div.form')
     for (property in json) {
         let field = this.createDOM('div.field')
         let label = this.createDOM('input.input')
-        let switchButton = renderSwitchButton()
+        let switchButton = this.render.switchButton()
         label.value = property
         let value
 
         const nonRecursive = _ => {
             field.className += 'has-addons'
-            field.append(renderControl(label), renderControl(value),renderControl(switchButton))
+            field.append(this.render.control(label), this.render.control(value),this.render.control(switchButton))
+        }
+
+        const textOrNumber = _ => {
+            value = this.createDOM('input.input')
+            value.value = json[property]
+            nonRecursive()
         }
 
         switch (typeof json[property]) {
             case 'string':
-                value = this.createDOM('input.input')
-                value.value = json[property]
-                nonRecursive()
+                textOrNumber()
                 break
             case 'number':
-                value = this.createDOM('input.input')
-                nonRecursive()
-                value.value = json[property]
+                textOrNumber()
+                value.type = 'number'
                 break
             case 'boolean':
-                value = renderBoolean(json[property])
+                value = this.render.dropdown([true, false], json[property])
                 nonRecursive()
                 break
             case 'object':
-                value = this.renderForm(json[property])
+                value = this.render.form(json[property])
                 field.className += 'recursive'
-                field.append(renderControl(label), renderControl(value, switchButton))
+                field.append(this.render.control(label), this.render.control(value, switchButton))
                 break
         }
         form.append(field)

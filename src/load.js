@@ -1,5 +1,5 @@
 const { readFile } = require('fs').promises
-const { renderForm } = require('./form.js')
+const { render } = require('./form.js')
 
 exports.loadFile = async(path) => {
     return await readFile(path, 'utf8')
@@ -25,7 +25,7 @@ exports.fileUpload = (DOM) => {
         this.toObject(this.loadFile(file.path), type)
             .then(data => {
                 let sect = document.querySelector('.section.main')
-                sect.appendChild(renderForm(data))
+                sect.appendChild(render.form(data))
             })
     } else {
         updateLabel(label, "No File Chosen")
