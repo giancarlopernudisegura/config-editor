@@ -17,19 +17,31 @@ this.render.dropdown = (values, def) => {
 }
 
 this.render.switchButton = _ => {
-    // <i class="fas fa-exchange-alt"></i>
-    let button = this.createDOM('button.button.info')
+    let button = this.createDOM('button.button.is-info')
     let icon = this.createDOM('span.icon')
     icon.append(this.createDOM('i.fas.fa-exchange-alt'))
     button.append(icon)
     return button
 }
 
-this.render.control = (DOM, otherDOM) => {
+this.render.removeButton = _ => {
+    let button = this.createDOM('button.button.is-danger')
+    let icon = this.createDOM('span.icon')
+    icon.append(this.createDOM('i.fas.fa-times'))
+    button.append(icon)
+    return button
+}
+
+this.render.control = (DOM, buttons) => {
     let control = this.createDOM('p.control')
     control.append(DOM)
-    if (otherDOM !== undefined)
-        control.append(otherDOM)
+    if (buttons !== undefined)  {
+        let btns = this.createDOM('div.btns')
+        for (let btn of buttons) {
+            btns.append(btn)
+        }
+        control.append(btns)
+    }
     return control
 }
 
@@ -39,12 +51,18 @@ this.render.form = (json) => {
         let field = this.createDOM('div.field')
         let label = this.createDOM('input.input')
         let switchButton = this.render.switchButton()
+        let removeButton = this.render.removeButton()
         label.value = property
         let value
 
         const nonRecursive = _ => {
             field.className += 'has-addons'
-            field.append(this.render.control(label), this.render.control(value),this.render.control(switchButton))
+            field.append(
+                this.render.control(label),
+                this.render.control(value),
+                this.render.control(switchButton),
+                this.render.control(removeButton)
+            )
         }
 
         const textOrNumber = _ => {
@@ -68,7 +86,12 @@ this.render.form = (json) => {
             case 'object':
                 value = this.render.form(json[property])
                 field.className += 'recursive'
-                field.append(this.render.control(label), this.render.control(value, switchButton))
+                switchButton.className += 'top'
+                removeButton.className += 'bottom'
+                field.append(
+                    this.render.control(label),
+                    this.render.control(value, [switchButton, removeButton])
+                )
                 break
         }
         form.append(field)

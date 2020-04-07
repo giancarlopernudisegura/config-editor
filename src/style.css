@@ -1,9 +1,3 @@
-:root {
-    --cyan: hsl(204, 86%, 55%);
-    --cyan-bright: hsl(204, 86%, 60%);
-    --cyan-dark: hsl(204, 86%, 50%);
-}
-
 html {
     overflow: auto;
 }
@@ -33,15 +27,21 @@ html {
     width: -webkit-fill-available;
 }
 
-.info, .button:focus, .button:hover {
-    background: var(--cyan);
-    color: white;
+.btns {
+    display: flex;
+    flex-direction: column;
 }
 
-.button:hover {
-    background: var(--cyan-bright);
+button.button.top {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
-.button:focus {
-    background: var(--cyan-dark);
+button.button.square {
+    border-radius: 0;
+}
+
+button.button.bottom {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
