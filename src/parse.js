@@ -1,3 +1,20 @@
+const renderBoolean = (val) => {
+    inputDOM = this.createDOM('div.select')
+    let select = this.createDOM('select')
+    let opts = [true, false]
+    for (let v of opts) {
+        let opt
+        opt = this.createDOM('option')
+        opt.value = v
+        opt.innerText = String(v)
+        if (v == val)
+            opt.selected = 'selected'
+        select.appendChild(opt)
+    }
+    inputDOM.appendChild(select)
+    return inputDOM
+}
+
 exports.renderForm = (json) => {
     let form = this.createDOM('div.form')
     for (property in json) {
@@ -15,19 +32,7 @@ exports.renderForm = (json) => {
                 value.value = json[property]
                 break;
             case 'boolean':
-                value = this.createDOM('div.select')
-                let select = this.createDOM('select')
-                let opts = [true, false]
-                for (let v of opts) {
-                    let opt
-                    opt = this.createDOM('option')
-                    opt.value = v
-                    opt.innerText = String(v)
-                    if (v == json[property])
-                        opt.selected = 'selected'
-                    select.appendChild(opt)
-                }
-                value.appendChild(select)
+                value = renderBoolean(json[property])
                 break;
             case 'object':
                 value = this.renderForm(json[property])
