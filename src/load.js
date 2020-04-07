@@ -16,8 +16,8 @@ exports.toObject = async(d, type) => {
 }
 
 exports.fileUpload = (path) => {
-    let type = recognizeType(path)
-    updateTitle(document.querySelector('h1.title.is-1'), type)
+    let type = recognizeType(getFileName(path))
+    updateTitle(document.querySelector('h1.title.is-1'), path)
     // load file, convert it to json, and render the form
     this.toObject(this.openFile(path), type)
         .then(data => {
@@ -27,12 +27,14 @@ exports.fileUpload = (path) => {
         })
 }
 
-const updateTitle = (DOM, str) => {
-    DOM.innerText = `${str} - Config Editor`
+const updateTitle = (DOM, path) => {
+    let file = getFileName(path)
+    console.log(file)
+    DOM.innerText = `${file} - Config Editor`
+    let windowTitle = document.querySelector('title')
+    windowTitle.innerHTML = `Config Editor - ${path}`
 }
 
-const recognizeType = (path) => {
-    let ending = /\.\w+$/i
-    let type = path.match(ending)
-    return type[0].substring(1)
-}
+const getFileName = (path) => path.match(/([A-Z.]+)$/i)[0]
+
+const recognizeType = (fileName) => fileName.match(/\w+$/i)[0]
