@@ -1,9 +1,40 @@
-const { readFile } = require('fs')
+const { readFile } = require('fs').promises
+const { renderForm } = require('./parse.js')
 
-exports.loadFile = (path) => {
-    readFile(path, (err, data) => {
-        if (err) throw err;
-        console.log(typeof data);
-        console.log(data);
-    })
+exports.loadFile = async(path) => {
+    return await readFile(path, 'utf8')
+}
+
+exports.toObject = async(d, type) => {
+    let data = await d
+    switch (type) {
+        case 'application/json':
+            return JSON.parse(data)
+        default:
+            console.error('File type not supported')
+    }
+}
+
+exports.fileUpload = (DOM) => {
+    let label = document.querySelector('.file-name')
+    if (DOM.files.length > 0) {
+        let file = DOM.files[0]
+        let type = file.type
+        updateLabel(label, file.name)
+        // load file, convert it to json, and render the form
+        this.toObject(this.loadFile(file.path), type)
+            .then(renderForm)
+    } else {
+        updateLabel(label, "No File Chosen")
+    }
+}
+
+const updateLabel = (DOM, str) => {
+    DOM.innerHTML = str
+}
+
+const recognizeType = (path) => {
+    let ending = /\.\w+$/i
+    let type = path.match(ending)
+    return type[0].substring(1)
 }
