@@ -12,7 +12,16 @@ html {
 
 .form {
     padding: 1rem;
+    border-radius: 4px;
     box-shadow: 0 0 10px #0002;
+}
+
+.field.recursive > p.control:nth-child(even) {
+    margin-top: 1rem;
+}
+
+.field.recursive > p.control:nth-child(even) > .form {
+    margin-right: .5rem;
 }
 
 .field.recursive {
