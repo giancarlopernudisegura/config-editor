@@ -12,8 +12,9 @@ html {
 
 .form {
     padding: 1rem;
+    border: solid .5px #0002;
     border-radius: 4px;
-    box-shadow: 0 0 15px #0002;
+    box-shadow: 0 0 15px #0001;
 }
 
 .field.recursive > p.control:nth-child(even) {
