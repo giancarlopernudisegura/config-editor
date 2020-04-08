@@ -45,20 +45,22 @@ this.render.control = (DOM, buttons) => {
     return control
 }
 
-this.render.form = (json) => {
+this.render.form = (json, isArray) => {
+    isArray = isArray || false
     let form = this.createDOM('div.form')
     for (property in json) {
         let field = this.createDOM('div.field')
         let label = this.createDOM('input.input')
         let switchButton = this.render.switchButton()
         let removeButton = this.render.removeButton()
+        if (!isArray)
+            field.append(this.render.control(label))
         label.value = property
         let value
 
         const nonRecursive = _ => {
             field.className += 'has-addons'
             field.append(
-                this.render.control(label),
                 this.render.control(value),
                 this.render.control(switchButton),
                 this.render.control(removeButton)
@@ -84,14 +86,15 @@ this.render.form = (json) => {
                 nonRecursive()
                 break
             case 'object':
-                value = this.render.form(json[property])
+                if (Array.isArray(json[property])) {
+                    value = this.render.form(json[property], true)
+                } else {
+                    value = this.render.form(json[property])
+                }
                 field.className += 'recursive'
                 switchButton.className += 'top'
                 removeButton.className += 'bottom'
-                field.append(
-                    this.render.control(label),
-                    this.render.control(value, [switchButton, removeButton])
-                )
+                field.append(this.render.control(value, [switchButton, removeButton]))
                 break
         }
         form.append(field)
