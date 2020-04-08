@@ -1,5 +1,6 @@
 const { readFile } = require('fs').promises
 const { render } = require('./form.js')
+exports
 
 exports.openFile = async(path) => {
     return await readFile(path, 'utf8')
@@ -10,13 +11,14 @@ exports.toObject = async(d, type) => {
     switch (type) {
         case 'json':
             return JSON.parse(data)
+            break
         default:
             console.error('File type not supported')
     }
 }
 
 exports.fileUpload = (path) => {
-    let type = recognizeType(getFileName(path))
+    let type = this.recognizeType(this.getFileName(path))
     updateTitle(document.querySelector('h1.title.is-1'), path)
     // load file, convert it to json, and render the form
     this.toObject(this.openFile(path), type)
@@ -28,13 +30,13 @@ exports.fileUpload = (path) => {
 }
 
 const updateTitle = (DOM, path) => {
-    let file = getFileName(path)
+    let file = this.getFileName(path)
     console.log(file)
     DOM.innerText = `${file} - Config Editor`
     let windowTitle = document.querySelector('title')
     windowTitle.innerHTML = `Config Editor - ${path}`
 }
 
-const getFileName = (path) => path.match(/([A-Z.]+)$/i)[0]
+exports.getFileName = (path) => path.match(/([\w\s.]+)$/i)[0]
 
-const recognizeType = (fileName) => fileName.match(/\w+$/i)[0]
+exports.recognizeType = (fileName) => fileName.match(/\w+$/i)[0]

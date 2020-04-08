@@ -1,10 +1,18 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron')
+const { getFilePath } = require('./save.js')
 const projectDir = 'src/'
 const isMac = process.platform === 'darwin'
 
-let replyEvent
+let path
+
+let loadEvent
 ipcMain.on('file-open', (event, arg) => {
-  replyEvent = event
+  loadEvent = event
+})
+
+let saveEvent
+ipcMain.on('file-save', (event, arg) => {
+  saveEvent = event
 })
 
 function createWindow () {
@@ -19,6 +27,7 @@ function createWindow () {
 
   // and load the index.html of the app.
   win.loadFile(projectDir + 'index.html')
+  win.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -51,21 +60,55 @@ app.whenReady().then(_ => {
           accelerator: 'CmdOrCtrl+O',
           click: _ => {
             dialog.showOpenDialog({
-              properties: ['openFile', 'showHiddenFiles']
-            }).then(({canceled, filePaths, bookmarks}) => {
-              let path = filePaths[0]
+              properties: [
+                'openFile',
+                'showHiddenFiles'
+              ]
+            }).then(({canceled, filePaths}) => {
+              path = filePaths[0]
               if (!canceled)
-                replyEvent.reply('file-open', path)
+                loadEvent.reply('file-open', path)
             })
           }
         },
         {
           label: 'Save',
-          accelerator: 'CmdOrCtrl+S'
+          accelerator: 'CmdOrCtrl+S',
+          click: _ => {
+            saveEvent.reply('file-save', path)
+          }
         },
         {
           label: 'Save As...',
-          accelerator: 'CmdOrCtrl+Shift+S'
+          accelerator: 'CmdOrCtrl+Shift+S',
+          click: _ => {
+            try {
+              dialog.showSaveDialog({
+                defaultPath: getFilePath(path),
+                properties: [
+                  'showHiddenFiles',
+                  'createDirectory',
+                  'showOverwriteConfirmation'
+                ]
+              }).then(({canceled, filePath}) => {
+                path = filePath
+                console.log(path)
+                if (!canceled) {
+                  saveEvent.reply('file-save', path)
+                  console.log(path)
+                  loadEvent.reply('file-open', path)
+                }
+              })
+            } catch (TypeError) {
+              dialog.showMessageBox({
+                type: 'error',
+                message: 'Can\'t save a file that isn\'t loaded...',
+                buttons: [
+                  'ok'
+                ]
+              })
+            }
+          }
         },
         isMac ? { role: 'close' } : { role: 'quit' }
       ]
@@ -95,7 +138,9 @@ app.whenReady().then(_ => {
         ] : [
           { role: 'delete' },
           { type: 'separator' },
-          { role: 'selectAll' }
+          { role: 'selectAll' },
+          { type: 'separator' },
+          { role: 'toggledevtools' }
         ])
       ]
     },
