@@ -1,25 +1,43 @@
 const { writeFile } = require('fs').promises
 const { getFileName, recognizeType } = require('./load.js')
 
-exports.formToJSON = (form) => {
+exports.formToJSON = (form, isArray) => {
+    isArray = isArray || false
     let json = {}
+
+    const getValue = (valueNode) => {
+        let value
+        if (!valueNode.classList.contains('form')) {
+            if (valueNode.nodeName === 'INPUT') {
+                value = valueNode.value
+                if (valueNode.type === 'number') {
+                    value = parseFloat(value)
+                }
+            } else if (valueNode.nodeName === 'DIV') {
+                valueNode.firstElementChild.value === 'true' ? value = true : value = false
+            }
+        } else {
+            if (valueNode.parentElement.parentElement.classList.contains('array')) {
+                value = this.formToJSON(valueNode, true)
+            } else {
+                value = this.formToJSON(valueNode)
+            }
+        }
+        return value
+    }
+
     let fields = form.childNodes
+    if (isArray) {
+        let array = []
+        for (let field of fields) {
+            let value = getValue(field.firstElementChild.firstElementChild)
+            array.push(value)
+        }
+        return array
+    }
     for (let field of fields) {
         let label = field.firstElementChild.firstElementChild.value
-        let value
-        let valueNode = field.childNodes[1].firstElementChild
-        if (!valueNode.classList.contains('form')) {
-        if (valueNode.nodeName === 'INPUT') {
-            value = valueNode.value
-            if (valueNode.type === 'number') {
-                value = parseFloat(value)
-            }
-        } else if (valueNode.nodeName === 'DIV') {
-            valueNode.firstElementChild.value === 'true' ? value = true : value = false
-        }
-        } else {
-            value = this.formToJSON(valueNode)
-        }
+        let value = getValue(field.childNodes[1].firstElementChild)
         json[label] = value
     }
     return json

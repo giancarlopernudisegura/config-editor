@@ -80,6 +80,7 @@ this.render.form = (json, isArray) => {
             case 'object':
                 if (Array.isArray(json[property])) {
                     value = this.render.form(json[property], true)
+                    field.className += 'array '
                 } else {
                     value = this.render.form(json[property])
                 }
