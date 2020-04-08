@@ -27,7 +27,6 @@ function createWindow () {
 
   // and load the index.html of the app.
   win.loadFile(projectDir + 'index.html')
-  win.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -55,6 +54,7 @@ app.whenReady().then(_ => {
     {
       label: 'File',
       submenu: [
+        { type: 'separator' },
         {
           label: 'Open File...',
           accelerator: 'CmdOrCtrl+O',
@@ -92,7 +92,6 @@ app.whenReady().then(_ => {
                 ]
               }).then(({canceled, filePath}) => {
                 path = filePath
-                console.log(path)
                 if (!canceled) {
                   saveEvent.reply('file-save', path)
                   console.log(path)
@@ -110,6 +109,7 @@ app.whenReady().then(_ => {
             }
           }
         },
+        { type: 'separator' },
         isMac ? { role: 'close' } : { role: 'quit' }
       ]
     },
