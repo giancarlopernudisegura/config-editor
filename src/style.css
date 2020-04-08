@@ -3,7 +3,7 @@ html {
 }
 
 .navbar-brand span.icon {
-    margin-inline-end: 1ex;
+    margin-inline-end: .5ex;
 }
 
 .section {
