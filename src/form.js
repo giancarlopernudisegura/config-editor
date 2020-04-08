@@ -16,18 +16,10 @@ this.render.dropdown = (values, def) => {
     return inputDOM
 }
 
-this.render.switchButton = _ => {
-    let button = this.createDOM('button.button.is-info')
+this.render.button = (color, iconId) => {
+    let button = this.createDOM('button.button' + color)
     let icon = this.createDOM('span.icon')
-    icon.append(this.createDOM('i.fas.fa-exchange-alt'))
-    button.append(icon)
-    return button
-}
-
-this.render.removeButton = _ => {
-    let button = this.createDOM('button.button.is-danger')
-    let icon = this.createDOM('span.icon')
-    icon.append(this.createDOM('i.fas.fa-times'))
+    icon.append(this.createDOM('i.fas' + iconId))
     button.append(icon)
     return button
 }
@@ -51,8 +43,8 @@ this.render.form = (json, isArray) => {
     for (property in json) {
         let field = this.createDOM('div.field')
         let label = this.createDOM('input.input')
-        let switchButton = this.render.switchButton()
-        let removeButton = this.render.removeButton()
+        let switchButton = this.render.button('.is-info', '.fa-exchange-alt')
+        let removeButton = this.render.button('.is-danger', '.fa-times')
         if (!isArray)
             field.append(this.render.control(label))
         label.value = property
