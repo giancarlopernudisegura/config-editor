@@ -41,10 +41,12 @@ this.render.control = (DOM, buttons) => {
 this.render.form = (json, isArray) => {
     let form = this.createDOM('div.form')
     let addButton = this.render.button('.is-success', '.fa-plus')
+    let addControl = this.render.control(addButton)
+    addControl.className += 'switch'
     for (property in json) {
         form.append(this.render.field(json, property, isArray))
     }
-    form.append(addButton)
+    form.append(addControl)
     return form
 }
 
@@ -55,6 +57,7 @@ this.render.field = (obj, key, isArray) => {
     let switchButton = this.render.button('.is-info', '.fa-exchange-alt')
     let switchControl = this.render.control(switchButton)
     switchControl.className += 'switch'
+    switchControl.append(switchType())
     let removeButton = this.render.button('.is-danger', '.fa-times')
     removeButton.setAttribute('onclick', 'buttons.removeValue(this)')
     if (!isArray)
@@ -77,8 +80,7 @@ this.render.field = (obj, key, isArray) => {
         nonRecursive()
     }
 
-    let type = typeof obj[key]
-    switch (type) {
+    switch (typeof obj[key]) {
         case 'string':
             textOrNumber()
             break
@@ -94,7 +96,6 @@ this.render.field = (obj, key, isArray) => {
             if (Array.isArray(obj[key])) {
                 value = this.render.form(obj[key], true)
                 field.className += 'array '
-                type = 'array'
             } else {
                 value = this.render.form(obj[key])
             }
@@ -104,7 +105,6 @@ this.render.field = (obj, key, isArray) => {
             field.append(this.render.control(value, [switchControl, removeButton]))
             break
     }
-    switchControl.append(switchType(type))
     return field
 }
 

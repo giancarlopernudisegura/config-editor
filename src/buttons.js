@@ -8,17 +8,17 @@ exports.removeValue = (node) => {
     keyPair.outerHTML = ''
 }
 
-exports.switchType = (def) => {
+exports.switchType = (onChangeCallback) => {
+    let def = 'Select a type...'
     let dropdownMenu = form.render.dropdown([
+        def,
         'text',
         'number',
         'boolean',
         'array',
         'object'
     ], def)
-    dropdownMenu.firstChild.onchange = function() {
-        // change pair value type
-    }
+    dropdownMenu.firstChild.onchange = onChangeCallback
     // css manual activation
     dropdownMenu.onmouseover = function() {
         this.parentNode.firstChild.classList.add('is-hovered')

@@ -77,6 +77,7 @@ input, .select, button {
 .switch {
     display: flex;
     flex-direction: column;
+    width: 2.5em;
 }
 
 .switch .select {
