@@ -1,5 +1,6 @@
 const { writeFile } = require('fs').promises
 const { getFileName, recognizeType } = require('./load.js')
+const { createDOM } = require('./form.js')
 
 exports.formToJSON = (form, isArray) => {
     isArray = isArray || false
@@ -64,6 +65,24 @@ exports.fileDownload = (path, form) => {
     let data = this.toString(json, type)
     writeFile(path, data)
     // add some saved notification in the future
+    showNotification()
+}
+
+const showNotification = _ => {
+    let notification = createDOM('div.notification.is-success')
+    let deleteFunction = 'this.parentNode.outerHTML = ""'
+    let button = createDOM('button.delete')
+    let text = 'File saved!'
+    button.setAttribute('onclick', deleteFunction)
+    button.setAttribute('onload', 'console.log(0)')
+    notification.append(button, text)
+    let notificationTray = document.querySelector('.notification-tray')
+    notificationTray.append(notification)
+    // delete after delay
+    let delay = 2500 // ms
+    setTimeout(_ => {
+        notification.outerHTML = ''
+    }, delay)
 }
 
 exports.getFilePath = (path) => path.replace(/([\w\s.]+)$/i, '')

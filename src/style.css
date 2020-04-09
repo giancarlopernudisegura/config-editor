@@ -63,3 +63,13 @@ input, .select {
 input, .select, button {
     z-index: 1;
 }
+
+.notification-tray {
+    position: fixed;
+    max-width: 256px;
+    right: 1rem;
+    top: 1rem;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+}
