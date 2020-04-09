@@ -1,5 +1,5 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron')
-const { getFilePath } = require('./save.js')
+const { getFilePath } = require('./save')
 const projectDir = 'src/'
 const isMac = process.platform === 'darwin'
 

@@ -1,6 +1,6 @@
 const { writeFile } = require('fs').promises
-const { getFileName, recognizeType } = require('./load.js')
-const { createDOM } = require('./form.js')
+const { getFileName, recognizeType } = require('./load')
+const { createDOM } = require('./form')
 
 exports.formToJSON = (form, isArray) => {
     isArray = isArray || false

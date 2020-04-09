@@ -1,5 +1,5 @@
 const { readFile } = require('fs').promises
-const { render } = require('./form.js')
+const { render } = require('./form')
 exports
 
 exports.openFile = async(path) => {

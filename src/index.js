@@ -1,7 +1,7 @@
 const { ipcRenderer } = require('electron')
-const { fileUpload } = require('./load.js')
-const { fileDownload } = require('./save.js')
-const buttons = require('./buttons.js')
+const { fileUpload } = require('./load')
+const { fileDownload } = require('./save')
+const buttons = require('./buttons')
 
 ipcRenderer.send('file-open', 'ready to open file')
 
