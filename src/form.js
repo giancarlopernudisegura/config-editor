@@ -1,3 +1,4 @@
+const { switchType } = require('./buttons')
 exports.render = {}
 
 this.render.dropdown = (values, def) => {
@@ -45,6 +46,8 @@ this.render.form = (json, isArray) => {
         let field = this.createDOM('div.field')
         let label = this.createDOM('input.input')
         let switchButton = this.render.button('.is-info', '.fa-exchange-alt')
+        let switchControl = this.render.control(switchButton)
+        switchControl.className += 'switch'
         let removeButton = this.render.button('.is-danger', '.fa-times')
         removeButton.setAttribute('onclick', 'buttons.removeValue(this)')
         if (!isArray)
@@ -56,7 +59,7 @@ this.render.form = (json, isArray) => {
             field.className += 'has-addons'
             field.append(
                 this.render.control(value),
-                this.render.control(switchButton),
+                switchControl,
                 this.render.control(removeButton)
             )
         }
@@ -67,7 +70,8 @@ this.render.form = (json, isArray) => {
             nonRecursive()
         }
 
-        switch (typeof json[property]) {
+        let type = typeof json[property]
+        switch (type) {
             case 'string':
                 textOrNumber()
                 break
@@ -83,15 +87,17 @@ this.render.form = (json, isArray) => {
                 if (Array.isArray(json[property])) {
                     value = this.render.form(json[property], true)
                     field.className += 'array '
+                    type = 'array'
                 } else {
                     value = this.render.form(json[property])
                 }
                 field.className += 'recursive'
                 switchButton.className += 'top'
                 removeButton.className += 'bottom'
-                field.append(this.render.control(value, [switchButton, removeButton]))
+                field.append(this.render.control(value, [switchControl, removeButton]))
                 break
         }
+        switchControl.append(switchType(type))
         form.append(field)
     }
     form.append(addButton)

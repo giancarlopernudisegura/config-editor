@@ -73,3 +73,14 @@ input, .select, button {
     display: flex;
     flex-direction: column;
 }
+
+.switch {
+    display: flex;
+    flex-direction: column;
+}
+
+.switch .select {
+    position: absolute;
+    opacity: 0;
+    z-index: 2;
+}
