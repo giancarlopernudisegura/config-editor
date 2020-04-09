@@ -39,69 +39,73 @@ this.render.control = (DOM, buttons) => {
 }
 
 this.render.form = (json, isArray) => {
-    isArray = isArray || false
     let form = this.createDOM('div.form')
     let addButton = this.render.button('.is-success', '.fa-plus')
     for (property in json) {
-        let field = this.createDOM('div.field')
-        let label = this.createDOM('input.input')
-        let switchButton = this.render.button('.is-info', '.fa-exchange-alt')
-        let switchControl = this.render.control(switchButton)
-        switchControl.className += 'switch'
-        let removeButton = this.render.button('.is-danger', '.fa-times')
-        removeButton.setAttribute('onclick', 'buttons.removeValue(this)')
-        if (!isArray)
-            field.append(this.render.control(label))
-        label.value = property
-        let value
-
-        const nonRecursive = _ => {
-            field.className += 'has-addons'
-            field.append(
-                this.render.control(value),
-                switchControl,
-                this.render.control(removeButton)
-            )
-        }
-
-        const textOrNumber = _ => {
-            value = this.createDOM('input.input')
-            value.value = json[property]
-            nonRecursive()
-        }
-
-        let type = typeof json[property]
-        switch (type) {
-            case 'string':
-                textOrNumber()
-                break
-            case 'number':
-                textOrNumber()
-                value.type = 'number'
-                break
-            case 'boolean':
-                value = this.render.dropdown([true, false], json[property])
-                nonRecursive()
-                break
-            case 'object':
-                if (Array.isArray(json[property])) {
-                    value = this.render.form(json[property], true)
-                    field.className += 'array '
-                    type = 'array'
-                } else {
-                    value = this.render.form(json[property])
-                }
-                field.className += 'recursive'
-                switchButton.className += 'top'
-                removeButton.className += 'bottom'
-                field.append(this.render.control(value, [switchControl, removeButton]))
-                break
-        }
-        switchControl.append(switchType(type))
-        form.append(field)
+        form.append(this.render.field(json, property, isArray))
     }
     form.append(addButton)
     return form
+}
+
+this.render.field = (obj, key, isArray) => {
+    isArray = isArray || false
+    let field = this.createDOM('div.field')
+    let label = this.createDOM('input.input')
+    let switchButton = this.render.button('.is-info', '.fa-exchange-alt')
+    let switchControl = this.render.control(switchButton)
+    switchControl.className += 'switch'
+    let removeButton = this.render.button('.is-danger', '.fa-times')
+    removeButton.setAttribute('onclick', 'buttons.removeValue(this)')
+    if (!isArray)
+        field.append(this.render.control(label))
+    label.value = key
+    let value
+
+    const nonRecursive = _ => {
+        field.className += 'has-addons'
+        field.append(
+            this.render.control(value),
+            switchControl,
+            this.render.control(removeButton)
+        )
+    }
+
+    const textOrNumber = _ => {
+        value = this.createDOM('input.input')
+        value.value = obj[key]
+        nonRecursive()
+    }
+
+    let type = typeof obj[key]
+    switch (type) {
+        case 'string':
+            textOrNumber()
+            break
+        case 'number':
+            textOrNumber()
+            value.type = 'number'
+            break
+        case 'boolean':
+            value = this.render.dropdown([true, false], obj[key])
+            nonRecursive()
+            break
+        case 'object':
+            if (Array.isArray(obj[key])) {
+                value = this.render.form(obj[key], true)
+                field.className += 'array '
+                type = 'array'
+            } else {
+                value = this.render.form(obj[key])
+            }
+            field.className += 'recursive'
+            switchButton.className += 'top'
+            removeButton.className += 'bottom'
+            field.append(this.render.control(value, [switchControl, removeButton]))
+            break
+    }
+    switchControl.append(switchType(type))
+    return field
 }
 
 exports.createDOM = (str) => {
