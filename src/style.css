@@ -23,7 +23,6 @@ html {
 
 .field.recursive > p.control:nth-child(even) > .form {
     margin-right: .5rem;
-    z-index: -1;
 }
 
 .field.recursive {
@@ -55,4 +54,12 @@ button.button.square {
 button.button.bottom {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+input, .select {
+    background: white;
+}
+
+input, .select, button {
+    z-index: 1;
 }
