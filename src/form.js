@@ -40,6 +40,7 @@ this.render.control = (DOM, buttons) => {
 this.render.form = (json, isArray) => {
     isArray = isArray || false
     let form = this.createDOM('div.form')
+    let addButton = this.render.button('.is-success', '.fa-plus')
     for (property in json) {
         let field = this.createDOM('div.field')
         let label = this.createDOM('input.input')
@@ -92,6 +93,7 @@ this.render.form = (json, isArray) => {
         }
         form.append(field)
     }
+    form.append(addButton)
     return form
 }
 
