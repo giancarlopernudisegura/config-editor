@@ -26,7 +26,11 @@ exports.formToJSON = (form, isArray) => {
         return value
     }
 
-    let fields = form.childNodes
+    let fields = []
+    // only adds fields and no other elements
+    for (let field of form.childNodes)
+        if (field.classList.contains('field'))
+            fields.push(field)
     if (isArray) {
         let array = []
         for (let field of fields) {
