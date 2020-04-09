@@ -46,6 +46,7 @@ this.render.form = (json, isArray) => {
         let label = this.createDOM('input.input')
         let switchButton = this.render.button('.is-info', '.fa-exchange-alt')
         let removeButton = this.render.button('.is-danger', '.fa-times')
+        removeButton.setAttribute('onclick', 'buttons.removeValue(this)')
         if (!isArray)
             field.append(this.render.control(label))
         label.value = property
